@@ -518,7 +518,7 @@ BOOL CTextInputCtrl::AleartMouseSink(LPARAM lParam)
     pt.y = GET_Y_LPARAM(lParam);
 
     BOOL bEaten = FALSE;
-    DWORD dwBtnState;
+    DWORD dwBtnState = 0;
 
     if (GetKeyState(VK_LBUTTON) & 0x80)
         dwBtnState = MK_LBUTTON;
