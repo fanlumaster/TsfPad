@@ -1,0 +1,13 @@
+.vs/
+out/
+build/
+Release/
+build64/
+build32/
+draft/
+*.log
+CMakeSettings.json
+log.txt
+/.clangd
+/CMakeLists.txt
+/CMakePresets.json
