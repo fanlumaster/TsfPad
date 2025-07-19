@@ -6,8 +6,8 @@ build64/
 build32/
 draft/
 *.log
-CMakeSettings.json
+# CMakeSettings.json
 log.txt
-/.clangd
-/CMakeLists.txt
-/CMakePresets.json
+# /.clangd
+# /CMakeLists.txt
+# /CMakePresets.json

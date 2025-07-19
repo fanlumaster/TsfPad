@@ -5,6 +5,7 @@
 #include "initguid.h"
 #include "InputScope.h"
 #include "tsattrs.h"
+#include <fmt/xchar.h>
 
 //+---------------------------------------------------------------------------
 //
@@ -16,8 +17,7 @@ STDAPI CTextStore::QueryInterface(REFIID riid, void **ppvObj)
 {
     *ppvObj = NULL;
 
-    if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITextStoreACP))
+    if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_ITextStoreACP))
     {
         *ppvObj = (ITextStoreACP *)this;
     }
@@ -131,7 +131,8 @@ STDAPI CTextStore::GetStatus(TS_STATUS *pdcs)
 //
 //----------------------------------------------------------------------------
 
-STDAPI CTextStore::QueryInsert(LONG acpInsertStart, LONG acpInsertEnd, ULONG cch, LONG *pacpResultStart, LONG *pacpResultEnd)
+STDAPI CTextStore::QueryInsert(LONG acpInsertStart, LONG acpInsertEnd, ULONG cch, LONG *pacpResultStart,
+                               LONG *pacpResultEnd)
 {
     *pacpResultStart = acpInsertStart;
     *pacpResultEnd = acpInsertEnd;
@@ -168,10 +169,10 @@ STDAPI CTextStore::GetSelection(ULONG ulIndex, ULONG ulCount, TS_SELECTION_ACP *
 STDAPI CTextStore::SetSelection(ULONG ulCount, const TS_SELECTION_ACP *pSelection)
 {
     if (ulCount > 0)
-    { 
+    {
         _pEditor->MoveSelection(pSelection[0].acpStart, pSelection[0].acpEnd);
 
-        CTextInputCtrl *pCtrl =  CTextInputCtrl::GetThis(_pEditor->GetWnd());
+        CTextInputCtrl *pCtrl = CTextInputCtrl::GetThis(_pEditor->GetWnd());
         if (pCtrl)
         {
             _pEditor->UpdateLayout(pCtrl->GetFont());
@@ -180,7 +181,8 @@ STDAPI CTextStore::SetSelection(ULONG ulCount, const TS_SELECTION_ACP *pSelectio
         _pEditor->SetInterimCaret(pSelection->style.fInterimChar);
     }
 
-    return S_OK;;
+    return S_OK;
+    ;
 }
 
 //----------------------------------------------------------------------------
@@ -189,7 +191,9 @@ STDAPI CTextStore::SetSelection(ULONG ulCount, const TS_SELECTION_ACP *pSelectio
 //
 //----------------------------------------------------------------------------
 
-STDAPI CTextStore::GetText(LONG acpStart, LONG acpEnd, __out_ecount(cchPlainReq) WCHAR *pchPlain, ULONG cchPlainReq, ULONG *pcchPlainOut, TS_RUNINFO *prgRunInfo, ULONG ulRunInfoReq, ULONG *pulRunInfoOut, LONG *pacpNext)
+STDAPI CTextStore::GetText(LONG acpStart, LONG acpEnd, __out_ecount(cchPlainReq) WCHAR *pchPlain, ULONG cchPlainReq,
+                           ULONG *pcchPlainOut, TS_RUNINFO *prgRunInfo, ULONG ulRunInfoReq, ULONG *pulRunInfoOut,
+                           LONG *pacpNext)
 {
 
     if ((cchPlainReq == 0) && (ulRunInfoReq == 0))
@@ -202,8 +206,7 @@ STDAPI CTextStore::GetText(LONG acpStart, LONG acpEnd, __out_ecount(cchPlainReq)
 
     acpEnd = min(acpEnd, acpStart + (int)cchPlainReq);
 
-    if ((acpStart != acpEnd) &&
-        !_pEditor->GetText(acpStart, pchPlain, acpEnd - acpStart))
+    if ((acpStart != acpEnd) && !_pEditor->GetText(acpStart, pchPlain, acpEnd - acpStart))
     {
         return E_FAIL;
     }
@@ -227,7 +230,8 @@ STDAPI CTextStore::GetText(LONG acpStart, LONG acpEnd, __out_ecount(cchPlainReq)
 //
 //----------------------------------------------------------------------------
 
-STDAPI CTextStore::SetText(DWORD dwFlags, LONG acpStart, LONG acpEnd, __in_ecount(cch) const WCHAR *pchText, ULONG cch, TS_TEXTCHANGE *pChange)
+STDAPI CTextStore::SetText(DWORD dwFlags, LONG acpStart, LONG acpEnd, __in_ecount(cch) const WCHAR *pchText, ULONG cch,
+                           TS_TEXTCHANGE *pChange)
 {
     LONG acpRemovingEnd;
 
@@ -277,7 +281,8 @@ STDAPI CTextStore::GetEmbedded(LONG acpPos, REFGUID rguidService, REFIID riid, I
 //
 //----------------------------------------------------------------------------
 
-STDAPI CTextStore::InsertEmbedded(DWORD dwFlags, LONG acpStart, LONG acpEnd, IDataObject *pDataObject, TS_TEXTCHANGE *pChange)
+STDAPI CTextStore::InsertEmbedded(DWORD dwFlags, LONG acpStart, LONG acpEnd, IDataObject *pDataObject,
+                                  TS_TEXTCHANGE *pChange)
 {
     return E_NOTIMPL;
 }
@@ -302,7 +307,8 @@ STDAPI CTextStore::RequestSupportedAttrs(DWORD dwFlags, ULONG cFilterAttrs, cons
 //
 //----------------------------------------------------------------------------
 
-STDAPI CTextStore::RequestAttrsAtPosition(LONG acpPos, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs, DWORD dwFlags)
+STDAPI CTextStore::RequestAttrsAtPosition(LONG acpPos, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs,
+                                          DWORD dwFlags)
 {
     PrepareAttributes(cFilterAttrs, paFilterAttrs);
     if (!_nAttrVals)
@@ -316,7 +322,8 @@ STDAPI CTextStore::RequestAttrsAtPosition(LONG acpPos, ULONG cFilterAttrs, const
 //
 //----------------------------------------------------------------------------
 
-STDAPI CTextStore::RequestAttrsTransitioningAtPosition(LONG acpPos, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs, DWORD dwFlags)
+STDAPI CTextStore::RequestAttrsTransitioningAtPosition(LONG acpPos, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs,
+                                                       DWORD dwFlags)
 {
     return E_NOTIMPL;
 }
@@ -327,7 +334,9 @@ STDAPI CTextStore::RequestAttrsTransitioningAtPosition(LONG acpPos, ULONG cFilte
 //
 //----------------------------------------------------------------------------
 
-STDAPI CTextStore::FindNextAttrTransition(LONG acpStart, LONG acpHalt, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs, DWORD dwFlags, LONG *pacpNext, BOOL *pfFound, LONG *plFoundOffset)
+STDAPI CTextStore::FindNextAttrTransition(LONG acpStart, LONG acpHalt, ULONG cFilterAttrs,
+                                          const TS_ATTRID *paFilterAttrs, DWORD dwFlags, LONG *pacpNext, BOOL *pfFound,
+                                          LONG *plFoundOffset)
 {
     *pacpNext = 0;
     *pfFound = FALSE;
@@ -344,7 +353,7 @@ STDAPI CTextStore::FindNextAttrTransition(LONG acpStart, LONG acpHalt, ULONG cFi
 STDAPI CTextStore::RetrieveRequestedAttrs(ULONG ulCount, TS_ATTRVAL *paAttrVals, ULONG *pcFetched)
 {
     *pcFetched = 0;
-    for (int i = 0; (i < (int)ulCount) && (i < _nAttrVals) ; i++)
+    for (int i = 0; (i < (int)ulCount) && (i < _nAttrVals); i++)
     {
         paAttrVals[i] = _attrval[i];
         *pcFetched++;
@@ -474,7 +483,8 @@ STDAPI CTextStore::QueryInsertEmbedded(const GUID *pguidService, const FORMATETC
 //
 //----------------------------------------------------------------------------
 
-STDAPI CTextStore::InsertTextAtSelection(DWORD dwFlags, __in_ecount(cch) const WCHAR *pchText, ULONG cch, LONG *pacpStart, LONG *pacpEnd, TS_TEXTCHANGE *pChange)
+STDAPI CTextStore::InsertTextAtSelection(DWORD dwFlags, __in_ecount(cch) const WCHAR *pchText, ULONG cch,
+                                         LONG *pacpStart, LONG *pacpEnd, TS_TEXTCHANGE *pChange)
 {
     LONG acpStart = _pEditor->GetSelectionStart();
     LONG acpEnd = _pEditor->GetSelectionEnd();
@@ -492,7 +502,6 @@ STDAPI CTextStore::InsertTextAtSelection(DWORD dwFlags, __in_ecount(cch) const W
     if (pchText && !_pEditor->InsertText(acpStart, pchText, cch))
         return E_FAIL;
 
-    
     if (pacpStart)
     {
         *pacpStart = acpStart;
@@ -521,12 +530,11 @@ STDAPI CTextStore::InsertTextAtSelection(DWORD dwFlags, __in_ecount(cch) const W
 //
 //----------------------------------------------------------------------------
 
-STDAPI CTextStore::InsertEmbeddedAtSelection(DWORD dwFlags, IDataObject *pDataObject, LONG *pacpStart, 
-        LONG *pacpEnd, TS_TEXTCHANGE *pChange)
+STDAPI CTextStore::InsertEmbeddedAtSelection(DWORD dwFlags, IDataObject *pDataObject, LONG *pacpStart, LONG *pacpEnd,
+                                             TS_TEXTCHANGE *pChange)
 {
     return E_NOTIMPL;
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -550,7 +558,7 @@ STDAPI CTextStore::AdviseMouseSink(ITfRangeACP *range, ITfMouseSink *pSink, DWOR
     else
     {
         UINT i;
-        for (i = 0; i < _nMouseSinks;i ++)
+        for (i = 0; i < _nMouseSinks; i++)
         {
             if (_prgMouseSinks[i].pRange == NULL)
             {
@@ -560,9 +568,8 @@ STDAPI CTextStore::AdviseMouseSink(ITfRangeACP *range, ITfMouseSink *pSink, DWOR
         }
         if (i == _nMouseSinks)
         {
-            void *pvNew = LocalReAlloc(_prgMouseSinks, 
-                                       (_nMouseSinks + 1) * sizeof(MOUSESINK), 
-                                       LMEM_MOVEABLE | LMEM_ZEROINIT);
+            void *pvNew =
+                LocalReAlloc(_prgMouseSinks, (_nMouseSinks + 1) * sizeof(MOUSESINK), LMEM_MOVEABLE | LMEM_ZEROINIT);
             if (!pvNew)
             {
                 return E_OUTOFMEMORY;
@@ -598,32 +605,27 @@ STDAPI CTextStore::UnadviseMouseSink(DWORD dwCookie)
     return S_OK;
 }
 
-
 //----------------------------------------------------------------------------
 //
 //
 //
 //----------------------------------------------------------------------------
 
-#define IF_ATTR_INPUTSCOPE           1
-#define IF_ATTR_FONT_STYLE_HEIGHT    2
-#define IF_ATTR_FONT_FACENAME        3
-#define IF_ATTR_FONT_SIZEPTS         4
-#define IF_ATTR_TEXT_READONLY        5
-#define IF_ATTR_TEXT_ORIENTATION     6
+#define IF_ATTR_INPUTSCOPE 1
+#define IF_ATTR_FONT_STYLE_HEIGHT 2
+#define IF_ATTR_FONT_FACENAME 3
+#define IF_ATTR_FONT_SIZEPTS 4
+#define IF_ATTR_TEXT_READONLY 5
+#define IF_ATTR_TEXT_ORIENTATION 6
 #define IF_ATTR_TEXT_VERTICALWRITING 7
 
-const GUID *c_rgSupportedAttr[7] = {&GUID_PROP_INPUTSCOPE,
-                                    &TSATTRID_Font_Style_Height,
-                                    &TSATTRID_Font_FaceName,
-                                    &TSATTRID_Font_SizePts,
-                                    &TSATTRID_Text_ReadOnly,
-                                    &TSATTRID_Text_Orientation,
-                                    &TSATTRID_Text_VerticalWriting};
+const GUID *c_rgSupportedAttr[7] = {
+    &GUID_PROP_INPUTSCOPE,   &TSATTRID_Font_Style_Height, &TSATTRID_Font_FaceName,       &TSATTRID_Font_SizePts,
+    &TSATTRID_Text_ReadOnly, &TSATTRID_Text_Orientation,  &TSATTRID_Text_VerticalWriting};
 
 void CTextStore::PrepareAttributes(ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs)
 {
-    _nAttrVals= 0;
+    _nAttrVals = 0;
     memset(_attrval, 0, sizeof(_attrval));
 
     for (int i = 0; i < ARRAYSIZE(c_rgSupportedAttr); i++)
@@ -651,47 +653,45 @@ void CTextStore::PrepareAttributes(ULONG cFilterAttrs, const TS_ATTRID *paFilter
 
         switch (i + 1)
         {
-            case IF_ATTR_INPUTSCOPE:
-                _attrval[_nAttrVals].varValue.vt = VT_UNKNOWN;
-                _attrval[_nAttrVals].varValue.punkVal = NULL;
-                break;
+        case IF_ATTR_INPUTSCOPE:
+            _attrval[_nAttrVals].varValue.vt = VT_UNKNOWN;
+            _attrval[_nAttrVals].varValue.punkVal = NULL;
+            break;
 
-            case IF_ATTR_FONT_STYLE_HEIGHT:
-                _attrval[_nAttrVals].varValue.vt = VT_I4;
-                _attrval[_nAttrVals].varValue.lVal = _pEditor->GetLineHeight();
-                break;
+        case IF_ATTR_FONT_STYLE_HEIGHT:
+            _attrval[_nAttrVals].varValue.vt = VT_I4;
+            _attrval[_nAttrVals].varValue.lVal = _pEditor->GetLineHeight();
+            break;
 
-            case IF_ATTR_FONT_FACENAME:
-                _attrval[_nAttrVals].varValue.vt = VT_BSTR;
-                _attrval[_nAttrVals].varValue.bstrVal = NULL;
-                break;
+        case IF_ATTR_FONT_FACENAME:
+            _attrval[_nAttrVals].varValue.vt = VT_BSTR;
+            _attrval[_nAttrVals].varValue.bstrVal = NULL;
+            break;
 
-            case IF_ATTR_FONT_SIZEPTS:
-                _attrval[_nAttrVals].varValue.vt = VT_I4;
-                _attrval[_nAttrVals].varValue.lVal = (int)((double)_pEditor->GetLineHeight() / 96.0 * 72.0);
-                break;
+        case IF_ATTR_FONT_SIZEPTS:
+            _attrval[_nAttrVals].varValue.vt = VT_I4;
+            _attrval[_nAttrVals].varValue.lVal = (int)((double)_pEditor->GetLineHeight() / 96.0 * 72.0);
+            break;
 
-            case IF_ATTR_TEXT_READONLY:
-                _attrval[_nAttrVals].varValue.vt = VT_BOOL;
-                _attrval[_nAttrVals].varValue.bVal = FALSE;
-                break;
+        case IF_ATTR_TEXT_READONLY:
+            _attrval[_nAttrVals].varValue.vt = VT_BOOL;
+            _attrval[_nAttrVals].varValue.bVal = FALSE;
+            break;
 
-            case IF_ATTR_TEXT_ORIENTATION:
-                _attrval[_nAttrVals].varValue.vt = VT_I4;
-                _attrval[_nAttrVals].varValue.lVal = 0;
-                break;
+        case IF_ATTR_TEXT_ORIENTATION:
+            _attrval[_nAttrVals].varValue.vt = VT_I4;
+            _attrval[_nAttrVals].varValue.lVal = 0;
+            break;
 
-            case IF_ATTR_TEXT_VERTICALWRITING:
-                _attrval[_nAttrVals].varValue.vt = VT_BOOL;
-                _attrval[_nAttrVals].varValue.bVal = FALSE;
-                break;
+        case IF_ATTR_TEXT_VERTICALWRITING:
+            _attrval[_nAttrVals].varValue.vt = VT_BOOL;
+            _attrval[_nAttrVals].varValue.bVal = FALSE;
+            break;
         }
 
         _nAttrVals++;
     }
-
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -708,6 +708,7 @@ STDAPI CTextStore::OnStartComposition(ITfCompositionView *pComposition, BOOL *pf
     }
 
     _pCurrentCompositionView = pComposition;
+    OutputDebugString(fmt::format(L"fanyfull OnStartComposition").c_str());
     _pCurrentCompositionView->AddRef();
 
     *pfOk = TRUE;
@@ -720,14 +721,15 @@ STDAPI CTextStore::OnStartComposition(ITfCompositionView *pComposition, BOOL *pf
 //
 //----------------------------------------------------------------------------
 
-STDAPI CTextStore::OnUpdateComposition(ITfCompositionView *pComposition,
-                                ITfRange *pRangeNew)
+STDAPI CTextStore::OnUpdateComposition(ITfCompositionView *pComposition, ITfRange *pRangeNew)
 {
     if (_pCurrentCompositionView)
     {
         _pCurrentCompositionView->Release();
         _pCurrentCompositionView = NULL;
     }
+
+    OutputDebugString(fmt::format(L"fanyfull OnUpdateComposition").c_str());
 
     _pCurrentCompositionView = pComposition;
     _pCurrentCompositionView->AddRef();

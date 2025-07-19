@@ -36,4 +36,10 @@ cmake --preset=default
 
 if ($LASTEXITCODE -eq 0) {
     cmake --build build
+    if ($LASTEXITCODE -eq 0) {
+        $exePath = getExePathFromCMakeLists
+        Write-Host "start running as follows..."
+        Write-Host "=================================================="
+        Invoke-Expression $exePath
+    }
 }

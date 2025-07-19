@@ -1,6 +1,8 @@
 
 #include "private.h"
+#include <string>
 #include "TextEditor.h"
+#include <fmt/xchar.h>
 
 extern ITfThreadMgr *g_pThreadMgr;
 extern TfClientId g_TfClientId;
@@ -24,7 +26,6 @@ void CTextEditor::MoveSelection(UINT nSelStart, UINT nSelEnd)
     _nSelEnd = nSelEnd;
 
     _pTextStore->OnSelectionChange();
-
 }
 
 //----------------------------------------------------------------
@@ -37,11 +38,10 @@ void CTextEditor::MoveSelectionNext()
 {
     UINT nTextLength = GetTextLength();
     if (_nSelEnd < nTextLength)
-       _nSelEnd++;
+        _nSelEnd++;
 
     _nSelStart = _nSelEnd;
     _pTextStore->OnSelectionChange();
-
 }
 
 //----------------------------------------------------------------
@@ -57,7 +57,6 @@ void CTextEditor::MoveSelectionPrev()
 
     _nSelEnd = _nSelStart;
     _pTextStore->OnSelectionChange();
-
 }
 
 //----------------------------------------------------------------
@@ -222,7 +221,8 @@ void CTextEditor::Render(HDC hdc, const LOGFONT *plf)
         HFONT hFontOrg = (HFONT)SelectObject(hdc, hFont);
 
         _layout.Layout(hdc, GetTextBuffer(), GetTextLength());
-        _layout.Render(hdc, GetTextBuffer(), GetTextLength(), _nSelStart, _nSelEnd, _pCompositionRenderInfo, _nCompositionRenderInfo);
+        _layout.Render(hdc, GetTextBuffer(), GetTextLength(), _nSelStart, _nSelEnd, _pCompositionRenderInfo,
+                       _nCompositionRenderInfo);
 
         SelectObject(hdc, hFontOrg);
         DeleteObject(hFont);
@@ -244,6 +244,9 @@ void CTextEditor::UpdateLayout(const LOGFONT *plf)
         if (hFont)
         {
             HFONT hFontOrg = (HFONT)SelectObject(hdc, hFont);
+
+            std::wstring strText(GetTextBuffer(), GetTextLength());
+            OutputDebugString(fmt::format(L"strText:{}", strText).c_str());
 
             _layout.Layout(hdc, GetTextBuffer(), GetTextLength());
 
@@ -274,7 +277,8 @@ BOOL CTextEditor::InitTSF()
         return FALSE;
     }
 
-    if (FAILED(_pDocumentMgr->CreateContext(g_TfClientId, 0, (ITextStoreACP *)_pTextStore, &_pInputContext, &_ecTextStore)))
+    if (FAILED(_pDocumentMgr->CreateContext(g_TfClientId, 0, (ITextStoreACP *)_pTextStore, &_pInputContext,
+                                            &_ecTextStore)))
     {
         return FALSE;
     }
@@ -341,7 +345,6 @@ BOOL CTextEditor::UninitTSF()
     return TRUE;
 }
 
-
 //----------------------------------------------------------------
 //
 //
@@ -355,7 +358,6 @@ void CTextEditor::SetFocusDocumentMgr()
         // g_pThreadMgr->SetFocus(_pDocumentMgr);
     }
 }
-
 
 //----------------------------------------------------------------
 //
@@ -383,9 +385,9 @@ BOOL CTextEditor::AddCompositionRenderInfo(int nStart, int nEnd, TF_DISPLAYATTRI
 {
     if (_pCompositionRenderInfo)
     {
-        void *pvNew = LocalReAlloc(_pCompositionRenderInfo, 
-                                   (_nCompositionRenderInfo + 1) * sizeof(COMPOSITIONRENDERINFO),
-                                   LMEM_MOVEABLE | LMEM_ZEROINIT);
+        void *pvNew =
+            LocalReAlloc(_pCompositionRenderInfo, (_nCompositionRenderInfo + 1) * sizeof(COMPOSITIONRENDERINFO),
+                         LMEM_MOVEABLE | LMEM_ZEROINIT);
         if (!pvNew)
             return FALSE;
 
@@ -393,8 +395,8 @@ BOOL CTextEditor::AddCompositionRenderInfo(int nStart, int nEnd, TF_DISPLAYATTRI
     }
     else
     {
-        _pCompositionRenderInfo = (COMPOSITIONRENDERINFO *)LocalAlloc(LPTR,
-                                   (_nCompositionRenderInfo + 1) * sizeof(COMPOSITIONRENDERINFO));
+        _pCompositionRenderInfo =
+            (COMPOSITIONRENDERINFO *)LocalAlloc(LPTR, (_nCompositionRenderInfo + 1) * sizeof(COMPOSITIONRENDERINFO));
         if (!_pCompositionRenderInfo)
             return FALSE;
     }
@@ -417,8 +419,10 @@ void CTextEditor::TerminateCompositionString()
     if (_pTextStore->GetCurrentCompositionView())
     {
         ITfContextOwnerCompositionServices *pCompositionServices;
-        if (_pInputContext->QueryInterface(IID_ITfContextOwnerCompositionServices, (void **)&pCompositionServices) == S_OK)
+        if (_pInputContext->QueryInterface(IID_ITfContextOwnerCompositionServices, (void **)&pCompositionServices) ==
+            S_OK)
         {
+            OutputDebugString(L"TerminateCompositionString\n");
             pCompositionServices->TerminateComposition(_pTextStore->GetCurrentCompositionView());
             pCompositionServices->Release();
         }
@@ -445,11 +449,10 @@ void CTextEditor::AleartMouseSink(POINT pt, DWORD dwBtnState, BOOL *pbEaten)
     {
         return;
     }
-    
+
     int nPos = (pt.x - rc.left) * 4 / (rc.right - rc.left) + 2;
     UINT uEdge = nSel + (nPos / 4);
     UINT uQuadrant = nPos % 4;
 
     _pTextStore->OnMouseEvent(uEdge, uQuadrant, dwBtnState, pbEaten);
 }
-

@@ -9,8 +9,8 @@
 
 class CTextInputCtrl
 {
-public:
-    CTextInputCtrl() 
+  public:
+    CTextInputCtrl()
     {
         _hwnd = NULL;
         HFONT hfontTemp = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
@@ -49,12 +49,18 @@ public:
             MoveWindow(_hwnd, x, y, nWidth, nHeight, TRUE);
     }
 
-    HWND GetWnd() {return _hwnd;}
-    const LOGFONT *GetFont() {return &_lfCurrentFont;}
+    HWND GetWnd()
+    {
+        return _hwnd;
+    }
+    const LOGFONT *GetFont()
+    {
+        return &_lfCurrentFont;
+    }
 
     void SetFont(HWND hwndParent);
 
-private:
+  private:
     BOOL AleartMouseSink(LPARAM lParam);
     HWND _hwnd;
 
@@ -62,5 +68,3 @@ private:
     LOGFONT _lfCurrentFont;
     UINT _uSelDragStart;
 };
-
-

@@ -10,6 +10,9 @@ add_definitions(
     /DUNICODE=1
 )
 
+# fmt
+find_package(fmt CONFIG REQUIRED)
+
 include_directories("./")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -40,4 +43,5 @@ add_executable(${PROJECT_NAME} WIN32
 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
     imm32.lib
+    fmt::fmt-header-only
 )

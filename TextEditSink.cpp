@@ -19,8 +19,7 @@ STDAPI CTextEditSink::QueryInterface(REFIID riid, void **ppvObj)
 {
     *ppvObj = NULL;
 
-    if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfTextEditSink))
+    if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_ITfTextEditSink))
     {
         *ppvObj = (ITfTextEditSink *)this;
     }
@@ -78,10 +77,9 @@ STDAPI CTextEditSink::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEdi
     if (pDispAttrProps)
     {
         IEnumTfRanges *pEnum;
-        if (SUCCEEDED(pEditRecord->GetTextAndPropertyUpdates(TF_GTP_INCL_TEXT,
-                                                             pDispAttrProps->GetPropTablePointer(),
-                                                             pDispAttrProps->Count(),
-                                                             &pEnum)) && pEnum)
+        if (SUCCEEDED(pEditRecord->GetTextAndPropertyUpdates(TF_GTP_INCL_TEXT, pDispAttrProps->GetPropTablePointer(),
+                                                             pDispAttrProps->Count(), &pEnum)) &&
+            pEnum)
         {
             ITfRange *pRange;
             if (pEnum->Next(1, &pRange, NULL) == S_OK)
@@ -92,7 +90,7 @@ STDAPI CTextEditSink::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEdi
                 _pEditor->ClearCompositionRenderInfo();
 
                 // We read the display attribute for entire range.
-                // It could be optimized by filtering the only delta with ITfEditRecord interface. 
+                // It could be optimized by filtering the only delta with ITfEditRecord interface.
                 ITfRange *pRangeEntire = NULL;
                 ITfRange *pRangeEnd = NULL;
                 if (SUCCEEDED(pic->GetStart(ecReadOnly, &pRangeEntire)) &&
@@ -130,7 +128,6 @@ STDAPI CTextEditSink::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEdi
                     pRangeEntire->Release();
                 if (pRangeEnd)
                     pRangeEnd->Release();
- 
             }
             pEnum->Release();
         }
@@ -140,7 +137,6 @@ STDAPI CTextEditSink::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEdi
 
     return S_OK;
 }
-
 
 //+---------------------------------------------------------------------------
 //

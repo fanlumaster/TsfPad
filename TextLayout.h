@@ -1,6 +1,10 @@
 #pragma once
 
-typedef struct {
+#include <Windows.h>
+#include <msctf.h>
+
+typedef struct
+{
     UINT nStart;
     UINT nEnd;
     TF_DISPLAYATTRIBUTE da;
@@ -12,10 +16,13 @@ typedef struct {
 //
 //----------------------------------------------------------------
 
-typedef struct 
+typedef struct
 {
     RECT rc;
-    int GetWidth() {return rc.right - rc.left;}
+    int GetWidth()
+    {
+        return rc.right - rc.left;
+    }
 } CHARINFO;
 
 //----------------------------------------------------------------
@@ -24,7 +31,7 @@ typedef struct
 //
 //----------------------------------------------------------------
 
-typedef struct 
+typedef struct
 {
     UINT nPos;
     UINT nCnt;
@@ -39,7 +46,7 @@ typedef struct
 
 class CTextLayout
 {
-public:
+  public:
     CTextLayout()
     {
         _prgLines = NULL;
@@ -53,8 +60,8 @@ public:
         Clear();
     }
 
-    BOOL Layout(HDC hdc, const WCHAR *psz,  UINT nCnt);
-    BOOL Render(HDC hdc, const WCHAR *psz,  UINT nCnt, UINT nSelStart, UINT nSelEnd,
+    BOOL Layout(HDC hdc, const WCHAR *psz, UINT nCnt);
+    BOOL Render(HDC hdc, const WCHAR *psz, UINT nCnt, UINT nSelStart, UINT nSelEnd,
                 const COMPOSITIONRENDERINFO *pCompositionRenderInfo, UINT nCompositionRenderInfo);
     BOOL RectFromCharPos(UINT nPos, RECT *prc);
     UINT CharPosFromPoint(POINT pt);
@@ -62,11 +69,17 @@ public:
     UINT FineFirstEndCharPosInLine(UINT uCurPos, BOOL bFirst);
     void BlinkCaret(HDC hdc);
     void SetInterimCaret(BOOL fSet, UINT uPos);
-    BOOL IsInterimCaret() {return _fInterimCaret;}
+    BOOL IsInterimCaret()
+    {
+        return _fInterimCaret;
+    }
 
-    int GetLineHeight() {return _nLineHeight;}
+    int GetLineHeight()
+    {
+        return _nLineHeight;
+    }
 
-private:
+  private:
     HPEN CreateUnderlinePen(const TF_DISPLAYATTRIBUTE *pda, int nWidth);
     void Clear();
 
@@ -78,5 +91,4 @@ private:
     BOOL _fCaret;
     BOOL _fInterimCaret;
     RECT _rcCaret;
-
 };

@@ -22,6 +22,4 @@
 
 // #define ARRAYSIZE(a)                (sizeof(a)/sizeof(a[0]))
 
-
-
-#endif  // _PRIVATE_H_
+#endif // _PRIVATE_H_

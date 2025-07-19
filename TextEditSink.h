@@ -2,13 +2,13 @@
 
 #include "private.h"
 
-#define TES_INVALID_COOKIE  ((DWORD)(-1))
+#define TES_INVALID_COOKIE ((DWORD)(-1))
 
 class CTextEditor;
 
 class CTextEditSink : public ITfTextEditSink
 {
-public:
+  public:
     CTextEditSink(CTextEditor *pEditor);
     virtual ~CTextEditSink() {};
 
@@ -27,10 +27,9 @@ public:
     HRESULT _Advise(ITfContext *pic);
     HRESULT _Unadvise();
 
-private:
+  private:
     long _cRef;
     ITfContext *_pic;
     DWORD _dwEditCookie;
     CTextEditor *_pEditor;
 };
-
