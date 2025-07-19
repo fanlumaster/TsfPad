@@ -10,8 +10,8 @@
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_TSFPAD             ICON                    "TsfPad.ico"
-IDI_SMALL               ICON                    "small.ico"
+IDI_TSFPAD             ICON                    "../assets/TsfPad.ico"
+IDI_SMALL               ICON                    "../assets/small.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
