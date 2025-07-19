@@ -233,6 +233,12 @@ STDAPI CTextStore::GetText(LONG acpStart, LONG acpEnd, __out_ecount(cchPlainReq)
 STDAPI CTextStore::SetText(DWORD dwFlags, LONG acpStart, LONG acpEnd, __in_ecount(cch) const WCHAR *pchText, ULONG cch,
                            TS_TEXTCHANGE *pChange)
 {
+    // Check the composition status
+    if (cch == 0 && _pCurrentCompositionView)
+    {
+        _pEditor->TerminateCompositionString();
+    }
+
     LONG acpRemovingEnd;
 
     if (acpStart > (LONG)_pEditor->GetTextLength())
@@ -248,6 +254,9 @@ STDAPI CTextStore::SetText(DWORD dwFlags, LONG acpStart, LONG acpEnd, __in_ecoun
     pChange->acpStart = acpStart;
     pChange->acpOldEnd = acpEnd;
     pChange->acpNewEnd = acpStart + cch;
+
+    // Update selection after text change
+    _pEditor->MoveSelection(acpStart + cch, acpStart + cch);
 
     _pEditor->InvalidateRect();
     return S_OK;
@@ -749,6 +758,10 @@ STDAPI CTextStore::OnEndComposition(ITfCompositionView *pComposition)
         _pCurrentCompositionView->Release();
         _pCurrentCompositionView = NULL;
     }
+
+    // Reset selection to current position
+    LONG nSelStart = _pEditor->GetSelectionStart();
+    _pEditor->MoveSelection(nSelStart, nSelStart);
 
     return S_OK;
 }

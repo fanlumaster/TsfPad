@@ -164,6 +164,13 @@ BOOL CTextEditor::InsertAtSelection(LPCWSTR psz)
 
 BOOL CTextEditor::DeleteAtSelection(BOOL fBack)
 {
+    // Check if we are in composition state
+    if (_pTextStore->GetCurrentCompositionView() && GetTextLength() == 0)
+    {
+        TerminateCompositionString();
+        return TRUE;
+    }
+
     if (!fBack && (_nSelEnd < GetTextLength()))
     {
         if (!RemoveText(_nSelEnd, 1))
@@ -426,6 +433,10 @@ void CTextEditor::TerminateCompositionString()
             pCompositionServices->TerminateComposition(_pTextStore->GetCurrentCompositionView());
             pCompositionServices->Release();
         }
+
+        // Clear composition render info
+        ClearCompositionRenderInfo();
+        InvalidateRect();
     }
 }
 
