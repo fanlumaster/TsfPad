@@ -1,4 +1,3 @@
-#include "private.h"
 #include "TextEditSink.h"
 #include "TextEditor.h"
 #include "DisplayAttribute.h"

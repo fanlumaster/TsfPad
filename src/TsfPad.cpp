@@ -1,10 +1,10 @@
 // TsfPad.cpp : Defines the entry point for the application.
 //
 
-#include "private.h"
-#include "TsfPad.h"
 #include "TextInputCtrl.h"
 #include "DisplayAttribute.h"
+#include "resource.h"
+
 #define MAX_LOADSTRING 100
 
 // Global Variables:

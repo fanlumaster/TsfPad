@@ -1,6 +1,7 @@
 #pragma once
 
 #include <msctf.h>
+#include "initguid.h"
 
 class CTextEditor;
 

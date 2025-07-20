@@ -1,8 +1,6 @@
-#include "private.h"
 #include "TextStore.h"
 #include "TextEditor.h"
 #include "TextInputCtrl.h"
-#include "initguid.h"
 #include "InputScope.h"
 #include "tsattrs.h"
 #include <fmt/xchar.h>
@@ -365,7 +363,7 @@ STDAPI CTextStore::RetrieveRequestedAttrs(ULONG ulCount, TS_ATTRVAL *paAttrVals,
     for (int i = 0; (i < (int)ulCount) && (i < _nAttrVals); i++)
     {
         paAttrVals[i] = _attrval[i];
-        *pcFetched++;
+        (*pcFetched)++;
     }
 
     return S_OK;

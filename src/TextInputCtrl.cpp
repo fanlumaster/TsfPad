@@ -1,6 +1,5 @@
-#include "private.h"
-#include "commdlg.h"
 #include "TextInputCtrl.h"
+#include "commdlg.h"
 
 extern HINSTANCE g_hInst;
 

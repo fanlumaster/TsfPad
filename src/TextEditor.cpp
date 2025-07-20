@@ -1,5 +1,3 @@
-
-#include "private.h"
 #include <string>
 #include "TextEditor.h"
 #include <fmt/xchar.h>

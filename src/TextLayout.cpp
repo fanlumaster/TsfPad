@@ -1,4 +1,3 @@
-#include "private.h"
 #include "TextLayout.h"
 
 //+---------------------------------------------------------------------------
@@ -17,6 +16,8 @@ COLORREF GetAttributeColor(const TF_DA_COLOR *pdac)
 
     case TF_CT_COLORREF:
         return pdac->cr;
+        break;
+    case TF_CT_NONE:
         break;
     }
     return GetSysColor(COLOR_WINDOWTEXT);

@@ -1,7 +1,6 @@
 //
 // dispattr.h
 //
-
 #pragma once
 
 #include "ctffunc.h"

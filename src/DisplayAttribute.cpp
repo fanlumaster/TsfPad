@@ -1,4 +1,3 @@
-#include "private.h"
 #include "DisplayAttribute.h"
 
 ITfDisplayAttributeMgr *g_pdam = NULL;

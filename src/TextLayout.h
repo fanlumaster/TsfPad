@@ -16,14 +16,14 @@ typedef struct
 //
 //----------------------------------------------------------------
 
-typedef struct
+struct CHARINFO
 {
     RECT rc;
     int GetWidth()
     {
         return rc.right - rc.left;
     }
-} CHARINFO;
+};
 
 //----------------------------------------------------------------
 //
