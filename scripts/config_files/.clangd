@@ -5,6 +5,10 @@ CompileFlags:
       -DUNICODE,
       -D_UNICODE,
       -DFANY_DEBUG,
+      # Include paths
+      "-IC:/Users/SonnyCalcr/EDisk/CppCodes/IMECodes/TsfPad/src",
+      # Third-party include paths via vcpkg
+      "-IC:/Users/SonnyCalcr/EDisk/CppCodes/IMECodes/TsfPad/build/vcpkg_installed/x64-windows/include",
       -Wno-unused-includes,
       -Wno-microsoft-goto,
       # -Wno-unused-value,

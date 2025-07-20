@@ -17,6 +17,9 @@ Prerequisites:
 - vcpkg
 - CMake
 - Python 3.10+
+- Scoop
+
+And make sure your vcpkg is installed by scoop.
 
 Run the following commands in the pwsh7:
 
