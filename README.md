@@ -1,6 +1,4 @@
-# TsfPad
-
-Original repo: <https://github.com/microsoft/Windows-classic-samples/tree/main/Samples/Win7Samples/winui/input/tsf/tsfapps/tsfpad-step4>
+# TsfPad rendered with direct2d
 
 ![](https://i.postimg.cc/DfjCHdWz/Snipaste-2025-07-20-02-01-07.png)
 
@@ -27,3 +25,7 @@ python .\scripts\prepare_env.py
 .\scripts\lcompile.ps1
 .\build\bin\Debug\TsfPad.exe
 ```
+
+## References
+
+- <https://github.com/microsoft/Windows-classic-samples/tree/main/Samples/Win7Samples/winui/input/tsf/tsfapps/tsfpad-step4>
